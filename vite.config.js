@@ -16,5 +16,14 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          protobuf: ["google-protobuf"],
+          grpc_web: ["grpc-web"],
+          rmcs_api: ["rmcs-api-client"]
+        }
+      }
+    }
   },
 });

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 // import devtools from 'solid-devtools/vite';
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   plugins: [
@@ -10,6 +11,10 @@ export default defineConfig({
     */
     // devtools(),
     solidPlugin(),
+    visualizer({
+      emitFile: true,
+      filename: "stats.html",
+    }),
   ],
   server: {
     port: 3000,
@@ -21,6 +26,8 @@ export default defineConfig({
         manualChunks: {
           protobuf: ["google-protobuf"],
           grpc_web: ["grpc-web"],
+          rmcs_auth: ["rmcs-auth-api"],
+          rmcs_resource: ["rmcs-resource-api"],
           rmcs_api: ["rmcs-api-client"]
         }
       }

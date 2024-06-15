@@ -1,14 +1,12 @@
 import { Router, Route } from "@solidjs/router";
 import Index from "./components/Index";
-import Counter from "./components/Counter";
-import NotFound from "./components/NotFound";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
     <Router>
       <Route path="/" component={Index} />
-      <Route path="/counter" component={Counter} />
-      <Route path="/*404" component={NotFound} />
+      <Route path="/dashboard" component={Dashboard} />
     </Router>
   );
 }

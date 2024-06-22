@@ -4,10 +4,12 @@ import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
-    <Router>
-      <Route path="/" component={Index} />
-      <Route path="/dashboard" component={Dashboard} />
-    </Router>
+    <div id="root">
+      <Router>
+        <Route path="/" component={Index} />
+        <Route path="/dashboard" component={Dashboard} />
+      </Router>
+    </div>
   );
 }
 

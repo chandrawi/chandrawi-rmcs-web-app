@@ -1,13 +1,7 @@
-import { For, createSignal } from "solid-js";
+import { For } from "solid-js";
+import { langs, lang, setLang, darkTheme, setDarkTheme } from "../../store";
 
-export default function SettingMenu(props) {
-
-  const langs = {"ID": "ID", "EN": "GB"};
-  let [lang, setLang] = createSignal("ID");
-  const lang_icon = (lang) => { return "/icon/fi-" + String(langs[lang]).toLowerCase() + ".svg" };
-
-  let [darkTheme, setDarkTheme] = createSignal(false);
-
+export default function SettingMenu(props) {  
   return (
     <div class="dropdown">
       <button tabindex="0" title="Setting" class="h-full pr-2">
@@ -15,14 +9,14 @@ export default function SettingMenu(props) {
       </button>
       <div class="flex flex-row justify-end">
         <div class="dropdown-content min-w-28 bg-white shadow-md_res shadow-slate-200 rounded-b-sm dark:bg-gray-800 dark:shadow-slate-950">
-          <For each={Object.keys(langs)}>
+          <For each={langs}>
           {(item) => (
             <button class="w-full px-3 py-1.5 flex flex-row items-center border-t border-slate-200 dark:border-slate-700"
-              classList={{ "hover:text-sky-800": lang() === item, "dark:hover:text-sky-300": lang() === item, "font-bold": lang() === item }}
-              onclick={()=>{setLang(item)}}
+              classList={{ "hover:text-sky-800": lang() !== item.name, "dark:hover:text-sky-300": lang() !== item.name, "font-bold": lang() === item.name }}
+              onclick={()=>{setLang(item.name)}}
             >
-              <img src={lang_icon(item)} class="w-[1.25rem] h-[0.9375rem] border border-slate-200 dark:border-slate-700" />
-              <span class="ml-1.5">{item}</span>
+              <img src={item.icon} class="w-[1.25rem] h-[0.9375rem] border border-slate-200 dark:border-slate-700" />
+              <span class="ml-1.5">{item.name}</span>
             </button>
           )}
           </For>

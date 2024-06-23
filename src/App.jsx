@@ -5,7 +5,7 @@ import { darkTheme } from "./store";
 
 function App() {
   return (
-    <div id="root" classList={{ dark: darkTheme() }}>
+    <div id="root" classList={{ dark: darkTheme() }} class="drawer md:drawer-open">
       <Router>
         <Route path="/" component={Index} />
         <Route path="/dashboard" component={Dashboard} />

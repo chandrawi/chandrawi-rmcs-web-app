@@ -12,7 +12,9 @@ export default function NavbarDashboard() {
     <div class="fixed z-30 top-0 w-full h-[3.5rem] flex flex-row bg-white dark:bg-slate-900 shadow-md_res shadow-slate-200 dark:shadow-slate-950 text-gray-800 dark:text-gray-200">
       <div class="md:min-w-[250px] md:w-[20%] w-auto h-full flex flex-row justify-center px-2 xs:px-3 md:px-4">
         <button class="md:hidden h-full flex items-center mr-1.5">
-          <span class="icon-menu_list text-xl"></span>
+          <label for="sidebar" class="drawer-button cursor-pointer">
+            <span class="icon-menu_list text-xl"></span>
+          </label>
         </button>
         <div class="h-full flex flex-row items-center">
           <img src="/image/gundala_logo.svg" alt="" class="w-9 h-8 min-w-9 min-h-8 xs:w-10 xs:h-9 xs:inline" />

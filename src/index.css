@@ -157,3 +157,36 @@
   }
   
 }
+
+@layer components {
+
+  html {
+    scrollbar-width: none;
+  }
+  .scrollbar-custom {
+    scrollbar-gutter: stable;
+    scrollbar-color: transparent transparent;
+    scrollbar-width: thin;
+  }
+  .scrollbar-custom:hover {
+    scrollbar-color: rgba(127, 127, 127, .75) transparent;
+  }
+  .scrollbar-custom::-webkit-scrollbar {
+    position: absolute;
+    width: 0.5rem;
+  }
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: rgba(136, 136, 136, .75);
+    visibility: hidden;
+  }
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: rgba(85, 85, 85, .75);
+  }
+  .scrollbar-custom:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+  }
+
+}

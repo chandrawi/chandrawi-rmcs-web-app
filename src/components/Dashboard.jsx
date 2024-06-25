@@ -1,11 +1,9 @@
-import SvgDashboard from "./svg/SvgDashboard";
 import NavbarDashboard from "./navigation/NavbarDashboard";
 import SidebarDashboard from "./navigation/SidebarDashboard";
 
 export default function Dashboard() {
   return (
     <>
-    <SvgDashboard />
     <input id="sidebar" type="checkbox" class="drawer-toggle" />
     <NavbarDashboard />
     <div class="drawer-content h-[calc(100vh-3.5rem)] mt-[3.5rem] bg-slate-50 dark:bg-slate-800">

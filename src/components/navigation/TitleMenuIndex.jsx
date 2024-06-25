@@ -22,19 +22,19 @@ export default function TitleMenuIndex() {
           </div>
           <div class="w-full block sm:hidden text-sm">
             <a href="/#/category/bridge" class="w-full pl-8 pr-2 py-1 flex flex-row items-center border-t border-slate-200 border-dotted hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-blank text-[1rem]"></span>
+              <span class="icon-list_square text-[1rem]"></span>
               <span class="ml-1.5">Bridge</span>
             </a>
             <a href="/#/category/overpass" class="w-full pl-8 pr-2 py-1 flex flex-row items-center border-t border-slate-200 border-dotted hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-blank text-[1rem]"></span>
+              <span class="icon-list_square text-[1rem]"></span>
               <span class="ml-1.5">Overpass Road</span>
             </a>
             <a href="/#/category/tunnel" class="w-full pl-8 pr-2 py-1 flex flex-row items-center border-t border-slate-200 border-dotted hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-blank text-[1rem]"></span>
+              <span class="icon-list_square text-[1rem]"></span>
               <span class="ml-1.5">Tunnel</span>
             </a>
             <a href="/#/category/slope" class="w-full pl-8 pr-2 py-1 flex flex-row items-center border-t border-slate-200 border-dotted hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-blank text-[1rem]"></span>
+              <span class="icon-list_square text-[1rem]"></span>
               <span class="ml-1.5">Slope Stability</span>
             </a>
           </div>
@@ -44,15 +44,15 @@ export default function TitleMenuIndex() {
           </div>
           <div class="w-full block sm:hidden text-sm">
             <a href="/#/region/province" class="w-full pl-8 pr-2 py-1 flex flex-row items-center border-t border-slate-200 border-dotted hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-blank text-[1rem]"></span>
+              <span class="icon-list_square text-[1rem]"></span>
               <span class="ml-1.5">Province</span>
             </a>
             <a href="/#/region/district" class="w-full pl-8 pr-2 py-1 flex flex-row items-center border-t border-slate-200 border-dotted hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-blank text-[1rem]"></span>
+              <span class="icon-list_square text-[1rem]"></span>
               <span class="ml-1.5">District and City</span>
             </a>
             <a href="/#/region/group" class="w-full pl-8 pr-2 py-1 flex flex-row items-center border-t border-slate-200 border-dotted hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-blank text-[1rem]"></span>
+              <span class="icon-list_square text-[1rem]"></span>
               <span class="ml-1.5">Region Group</span>
             </a>
           </div>
@@ -74,19 +74,19 @@ export default function TitleMenuIndex() {
       <div class="w-full sm:w-auto flex flex-row break-words">
         <div class="dropdown-content w-60 bg-white shadow-md_res shadow-slate-200 rounded-b-sm dark:bg-gray-800 dark:shadow-slate-950">
           <a href="/#/category/bridge" class="w-full px-2 py-1.5 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-            <span class="icon-blank text-[1rem]"></span>
+            <span class="icon-list_square text-[1rem]"></span>
             <span class="ml-1.5">Bridge</span>
           </a>
           <a href="/#/category/overpass" class="w-full px-2 py-1.5 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-            <span class="icon-blank text-[1rem]"></span>
+            <span class="icon-list_square text-[1rem]"></span>
             <span class="ml-1.5">Overpass Road</span>
           </a>
           <a href="/#/category/tunnel" class="w-full px-2 py-1.5 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-            <span class="icon-blank text-[1rem]"></span>
+            <span class="icon-list_square text-[1rem]"></span>
             <span class="ml-1.5">Tunnel</span>
           </a>
           <a href="/#/category/slope" class="w-full px-2 py-1.5 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-            <span class="icon-blank text-[1rem]"></span>
+            <span class="icon-list_square text-[1rem]"></span>
             <span class="ml-1.5">Slope Stability</span>
           </a>
         </div>
@@ -103,15 +103,15 @@ export default function TitleMenuIndex() {
       <div class="w-full sm:w-auto flex flex-row justify-end lg:justify-start break-words">
         <div class="dropdown-content w-60 bg-white shadow-md_res shadow-slate-200 rounded-b-sm dark:bg-gray-800 dark:shadow-slate-950">
           <a href="/#/region/province" class="w-full px-2 py-1.5 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-            <span class="icon-blank text-[1rem]"></span>
+            <span class="icon-list_square text-[1rem]"></span>
             <span class="ml-1.5">Province</span>
           </a>
           <a href="/#/region/district" class="w-full px-2 py-1.5 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-            <span class="icon-blank text-[1rem]"></span>
+            <span class="icon-list_square text-[1rem]"></span>
             <span class="ml-1.5">District and City</span>
           </a>
           <a href="/#/region/group" class="w-full px-2 py-1.5 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-            <span class="icon-blank text-[1rem]"></span>
+            <span class="icon-list_square text-[1rem]"></span>
             <span class="ml-1.5">Region Group</span>
           </a>
         </div>

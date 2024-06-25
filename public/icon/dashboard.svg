@@ -1,7 +1,5 @@
-export default function SvgDashboard() {
-  return (
-  <svg version="1.0" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:none">
-  <defs>
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="display:none">
+<defs>
 
   <g id="landslide" transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="none">
     <path d="M904 2733 c-67 -65 -71 -85 -45 -221 32 -168 47 -218 76 -240 23 -18 29 -19 90 -6 76 16 111 32 141 66 46 50 94 178 94 250 0 21 -9 56 -20 78 -28 54 -126 101 -225 108 l-70 4 -41 -39z"/>
@@ -12,7 +10,5 @@ export default function SvgDashboard() {
     <path d="M2471 1358 c-73 -40 -147 -123 -171 -192 -50 -145 -61 -220 -39 -270 8 -16 33 -34 73 -51 85 -37 154 -84 217 -149 68 -71 99 -81 193 -61 100 21 149 48 170 92 37 79 30 281 -15 405 -28 77 -78 132 -137 153 -26 10 -83 32 -127 51 -113 47 -116 47 -164 22z"/>
   </g>
 
-  </defs>
-  </svg>
-  );
-}
+</defs>
+</svg>

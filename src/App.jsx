@@ -9,6 +9,10 @@ function App() {
       <Router>
         <Route path="/" component={Index} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/dashboard/:id" component={Dashboard} />
+        <Route path="/dashboard/:id/:menu" component={Dashboard} />
+        <Route path="/dashboard/:id/:menu/:submenu" component={Dashboard} />
+        <Route path="/dashboard/:id/:menu/:submenu/*rest" component={Dashboard} />
       </Router>
     </div>
   );

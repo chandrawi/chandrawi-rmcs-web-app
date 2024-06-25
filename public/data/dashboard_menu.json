@@ -1,0 +1,71 @@
+[{
+  "id": 0,
+  "parent_id": 0,
+  "name": "overview",
+  "text": "Overview",
+  "icon": "icon-overview",
+  "link": ""
+}, {
+  "id": 1,
+  "parent_id": 1,
+  "name": "status",
+  "text": "Status",
+  "icon": "icon-information",
+  "link": ""
+}, {
+  "id": 2,
+  "parent_id": 2,
+  "name": "sensor",
+  "text": "Sensor",
+  "icon": "icon-sensor_device",
+  "link": ""
+}, {
+  "id": 3,
+  "parent_id": 2,
+  "name": "accelerometer",
+  "text": "Accelerometer",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 4,
+  "parent_id": 2,
+  "name": "piezometer",
+  "text": "Piezometer",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 5,
+  "parent_id": 2,
+  "name": "rain_gauge",
+  "text": "Rain Gauge",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 6,
+  "parent_id": 2,
+  "name": "environment",
+  "text": "Environment",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 7,
+  "parent_id": 7,
+  "name": "analysis",
+  "text": "Analysis",
+  "icon": "icon-analysis",
+  "link": ""
+}, {
+  "id": 8,
+  "parent_id": 7,
+  "name": "soil_inclinometer",
+  "text": "Soil Inclinometer",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 9,
+  "parent_id": 9,
+  "name": "administrator",
+  "text": "Administrator",
+  "icon": "icon-administrator",
+  "link": "/admin"
+}]

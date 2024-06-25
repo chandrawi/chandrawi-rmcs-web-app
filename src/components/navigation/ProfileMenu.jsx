@@ -37,8 +37,8 @@ export default function ProfileMenu(props) {
               <span class="ml-1.5">Profile</span>
             </a>
             <a href="/#/user/message" class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
-              <span class="icon-message text-[1.25rem] w-5"></span>
-              <span class="ml-2">Message</span>
+              <span class="icon-message text-[1rem] w-5"></span>
+              <span class="ml-1.5">Message</span>
               <div class="grow h-full flex flex-row items-center justify-end">
                 <span class="h-4 px-1 bg-red-700 rounded-md text-[0.6875rem] text-gray-100">20</span>
               </div>

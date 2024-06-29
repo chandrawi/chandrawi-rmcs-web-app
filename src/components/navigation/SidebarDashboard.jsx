@@ -29,7 +29,9 @@ export default function SidebarDashboard() {
   };
 
   return (
-    <div class="min-w-[250px] min-h-full pl-4 pr-3 py-3 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-200">
+    <div class="min-w-[max(250px,20vw)] h-[calc(100vh-3.5rem)] mt-[3.5rem] pl-4 pr-2 py-3 bg-white dark:bg-slate-900 
+      text-gray-800 dark:text-gray-200 border-r border-slate-100 dark:border-slate-800 overflow-auto scrollbar-custom"
+    >
       <For each={menus()}>
       {(item) => (
         <Show when={isPortal(item)} fallback={

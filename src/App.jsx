@@ -5,9 +5,13 @@ import { darkTheme } from "./store";
 
 function App() {
   return (
-    <div id="root" classList={{ dark: darkTheme() }} class="drawer md:drawer-open">
+    <div classList={{ dark: darkTheme() }} class="drawer md:drawer-open h-[100vh] overflow-hidden">
       <Router>
         <Route path="/" component={Index} />
+        <Route path="/" component={Index}>
+          <Route path="/login" component={Login} />
+          <Route path="/logout" component={Logout} />
+        </Route>
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/dashboard/:id" component={Dashboard} />
         <Route path="/dashboard/:id/:menu" component={Dashboard} />

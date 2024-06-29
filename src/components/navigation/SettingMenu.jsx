@@ -1,7 +1,7 @@
 import { For } from "solid-js";
-import { langs, lang, setLang, darkTheme, setDarkTheme } from "../../store";
+import { langs, lang, setLang, darkTheme, setDarkTheme, userId } from "../../store";
 
-export default function SettingMenu(props) {  
+export default function SettingMenu() {
   return (
     <div class="dropdown">
       <button tabindex="0" title="Setting" class="h-full pr-2">
@@ -37,7 +37,7 @@ export default function SettingMenu(props) {
             </div>
           </button>
           <div class="w-full px-3 py-1.5 xl:hidden flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300"
-            classList={{ hidden: props.login }}
+            classList={{ hidden: userId() }}
           >
             <a href="/#/register" class="text-sm text-gray-100 py-0.5 px-2 bg-sky-700 hover:bg-sky-800 rounded-sm hover:text-white">Register</a>
           </div>

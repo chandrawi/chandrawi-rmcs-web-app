@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "address": "http://localhost:9001"
+  },
+  "resource": [
+    {
+      "address": "http://localhost:9002",
+      "id": "8082c3f5-cae4-45f6-ac7e-cb570772f4c8"
+    }
+  ]
+}

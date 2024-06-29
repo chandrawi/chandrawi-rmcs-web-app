@@ -29,8 +29,8 @@ export default function NavbarDashboard() {
         </div>
         <div class="h-full flex flex-row">
           <SearchMenu searchExpand={searchExpand} setSearchExpand={setSearchExpand} />
-          <SettingMenu login={true} />
-          <ProfileMenu login={true} />
+          <SettingMenu />
+          <ProfileMenu />
         </div>
       </div>
     </div>

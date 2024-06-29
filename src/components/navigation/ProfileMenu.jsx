@@ -1,8 +1,16 @@
-import { Show } from "solid-js";
+import { Show, createResource } from "solid-js";
+import { read_user } from "rmcs-api-client";
+import { userId, authServer } from "../../store";
 
-export default function ProfileMenu(props) {
+export default function ProfileMenu() {
+
+  const [userData] = createResource(userId(), async (user_id) => {
+    return read_user(authServer.get(), { id: user_id })
+      .catch(() => null);
+  });
+
   return (
-    <Show when={props.login} fallback={
+    <Show when={userId()} fallback={
       <>
       <div class="hidden lg:block h-full xl:pl-2.5 xl:border-l border-slate-200 dark:border-slate-700">
         <div class="hidden xl:flex flex-row h-full items-center">
@@ -10,7 +18,7 @@ export default function ProfileMenu(props) {
         </div>
       </div>
       <div class="h-full xl:ml-2 text-sm">
-        <a href="/#/login" class="group h-full flex flex-col lg:flex-row items-center justify-center font-medium">
+        <a href="/login" class="group h-full flex flex-col lg:flex-row items-center justify-center font-medium">
           <span class="mr-1 hidden lg:inline group-hover:text-sky-800 dark:group-hover:text-sky-300">Login</span>
           <span class="icon-login text-[1.5rem] lg:text-[2rem] text-sky-700"></span>
           <span class="mr-1 lg:hidden group-hover:text-sky-800 dark:group-hover:text-sky-300">Login</span>
@@ -20,7 +28,9 @@ export default function ProfileMenu(props) {
     }>
       <div class="dropdown h-full xl:pl-2.5 mr-3 xl:border-l border-slate-200 dark:border-slate-700">
         <button tabindex="0" class="h-full flex flex-row items-center">
-          <span class="w-full pr-1 hidden xl:inline font-medium">Username</span>
+          <span class="w-full pr-1 hidden xl:inline font-medium">
+            {userData() ? userData().name : "Username"}
+          </span>
           <div class="w-9 h-9 relative rounded-full border-2 border-sky-700 flex items-center justify-center">
             <span class="icon-user_circle text-[2.25rem] text-sky-700"></span>
             <span class="h-4 -mt-6 px-1 inline-block absolute left-6 align-middle text-gray-100 text-[0.6875rem] rounded-md bg-red-700">25</span>
@@ -31,7 +41,9 @@ export default function ProfileMenu(props) {
         </button>
         <div class="w-full flex flex-row justify-end">
           <div class="dropdown-content w-44 -mr-1 pb-0.5 fixed bg-white shadow-md_res shadow-slate-200 rounded-b-sm dark:bg-gray-800 dark:shadow-slate-950">
-            <span class="w-full h-8 px-4 flex xl:hidden flex-row items-center font-medium border-t border-slate-200 dark:border-slate-700">Username</span>
+            <span class="w-full h-8 px-4 flex xl:hidden flex-row items-center font-medium border-t border-slate-200 dark:border-slate-700">
+              {userData() ? userData().name : "Username"}
+            </span>
             <a href="/#/user/profile" class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
               <span class="icon-user text-[1rem] w-5 ml-0.5"></span>
               <span class="ml-1.5">Profile</span>

@@ -1,5 +1,42 @@
+import { createSignal } from "solid-js";
+import { useNavigate } from "@solidjs/router";
+import { user_login } from "rmcs-api-client";
+import { authServer, resourceServer, setUserId } from "../../store";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  let [errorMessage, setErrorMessage] = createSignal("");
+  let inputUsername, inputPassword;
+
+  function submitLogin(e) {
+    e.preventDefault();
+    // avoid login if input username or password empty
+    if (inputUsername.value == '') {
+      setErrorMessage("Username/Email empty");
+      return;
+    }
+    if (inputPassword.value == '') {
+      setErrorMessage("Password empty");
+      return;
+    }
+    // login using input username and password then save tokens and user id response
+    user_login(authServer.get(), {
+      username: inputUsername.value,
+      password: inputPassword.value
+    }).then((login) => {
+      authServer.setToken(login.auth_token);
+      setUserId(login.user_id);
+      for (const access of login.access_tokens) {
+        resourceServer.setToken(access.api_id, access.access_token);
+        resourceServer.setRefreshToken(access.api_id, access.refresh_token);
+      }
+      navigate("/", {replace:true});
+    }).catch(() => {
+      setErrorMessage("Username and password not matched");
+    });
+  }
+
   return(
     <div class="w-full min-h-[calc(100vh-3.5rem)] pt-6 pb-12 flex items-center justify-center">
       <div class="bg-white rounded-sm shadow-md shadow-slate-300 dark:bg-gray-900 dark:shadow-slate-950">

@@ -1,24 +1,37 @@
 import { createSignal, createEffect, createRoot } from "solid-js";
 
+const EXPIRE = 604800;
+
 function createCookie(name, value, seconds) {
-	if (seconds) {
-		var date = new Date();
-		date.setTime(date.getTime() + (seconds * 1000));
-		var expires = "; expires=" + date.toGMTString();
-	}
-	else var expires = "";
-	document.cookie = name + "=" + value + expires + "; path=/; SameSite=strict";
+  if (seconds) {
+    var date = new Date();
+    date.setTime(date.getTime() + (seconds * 1000));
+    var expires = "; expires=" + date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name + "=" + value + expires + "; path=/; SameSite=strict";
 }
 
 function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-	}
-	return null;
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
+function listCookiesName() {
+  var names = [];
+  var ca = document.cookie.split(';');
+  for(var i=0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    names.push(c.split('=')[0])
+  }
+  return names;
 }
 
 export const langs = [
@@ -31,7 +44,7 @@ export const [lang, setLang] = createRoot(() => {
   const initialLang = cookieLang ? cookieLang : "ID";
   let [lang, setLang] = createSignal(initialLang);
   createEffect(() => {
-    createCookie("lang", lang(), 604800);
+    createCookie("lang", lang(), EXPIRE);
   });
   return [lang, setLang];
 });
@@ -43,7 +56,86 @@ export const [darkTheme, setDarkTheme] = createRoot(() => {
   const [darkTheme, setDarkTheme] = createSignal(initialTheme);
   createEffect(() => {
     const theme = darkTheme() ? "1" : "0";
-    createCookie("darkTheme", theme, 604800);
+    createCookie("darkTheme", theme, EXPIRE);
   });
   return [darkTheme, setDarkTheme];
 });
+
+export const [userId, setUserId] = createRoot(() => {
+  const cookieUser = readCookie("user_id");
+  const [userId, setUserId] = createSignal(cookieUser);
+  createEffect(() => {
+    createCookie("user_id", userId(), EXPIRE);
+  });
+  return [userId, setUserId]
+});
+
+export const authServer = {
+  address: null,
+  token: null,
+
+  /** @returns {{ address:?string, token:?string }} */
+  get() {
+    const address = readCookie("auth_address");
+    const token = readCookie("auth_token");
+    if (address) this.address = address;
+    if (token) this.token = token;
+    return { address: this.address, token: this.token };
+  },
+
+  /** @param {string} address */
+  setAddress(address) {
+    this.address = address;
+    createCookie("auth_address", address, EXPIRE);
+  },
+
+  /** @param {string} token */
+  setToken(token) {
+    this.token = token;
+    createCookie("auth_token", token, EXPIRE);
+  }
+};
+
+export const resourceServer = {
+  resources: {},
+  empty: { address: null, token: null, refresh_token: null },
+
+  /** @param {string} id @returns {{ address:?string, token:?string, refresh_token:?string }} */
+  get(id) {
+    if (!(id in this.resources)) this.resources[id] = this.empty;
+    for (const name of listCookiesName()) {
+      const cookievalue = readCookie(name);
+      if (name.indexOf("resource_address_" + id) == 0) {
+        if (cookievalue) this.resources[id].address = cookievalue;
+      }
+      if (name.indexOf("resource_token_" + id) == 0) {
+        if (cookievalue) this.resources[id].token = cookievalue;
+      }
+      if (name.indexOf("resource_refresh_" + id) == 0) {
+        if (cookievalue) this.resources[id].refresh_token = cookievalue;
+      }
+    }
+    return this.resources[id];
+  },
+
+  /** @param {string} id @param {string} address */
+  setAddress(id, address) {
+    if (!(id in this.resources)) this.resources[id] = this.empty;
+    this.resources[id].address = address;
+    createCookie("resource_address_" + id, address, EXPIRE);
+  },
+
+  /** @param {string} id @param {string} token */
+  setToken(id, token) {
+    if (!(id in this.resources)) this.resources[id] = this.empty;
+    this.resources[id].token = token;
+    createCookie("resource_token_" + id, token, EXPIRE);
+  },
+
+  /** @param {string} id @param {string} refresh_token */
+  setRefreshToken(id, refresh_token) {
+    if (!(id in this.resources)) this.resources[id] = this.empty;
+    this.resources[id].refresh_token = refresh_token;
+    createCookie("resource_refresh_" + id, refresh_token, EXPIRE);
+  }
+};

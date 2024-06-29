@@ -32,8 +32,17 @@ export default function Login() {
         resourceServer.setRefreshToken(access.api_id, access.refresh_token);
       }
       navigate("/", {replace:true});
-    }).catch(() => {
-      setErrorMessage("Username and password not matched");
+    }).catch((error) => {
+      switch(error.message) {
+        case "password does not match":
+          setErrorMessage("Username and password not matched");
+          break;
+        case "requested username not found":
+          setErrorMessage("Username is not registered");
+          break;
+        default:
+          setErrorMessage("Server error");
+      }
     });
   }
 

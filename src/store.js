@@ -23,6 +23,10 @@ function readCookie(name) {
   return null;
 }
 
+function deleteCookie(name) {
+  createCookie(name, "", -1);
+}
+
 function listCookiesName() {
   var names = [];
   var ca = document.cookie.split(';');
@@ -65,7 +69,11 @@ export const [userId, setUserId] = createRoot(() => {
   const cookieUser = readCookie("user_id");
   const [userId, setUserId] = createSignal(cookieUser);
   createEffect(() => {
-    createCookie("user_id", userId(), EXPIRE);
+    if (userId() === null) {
+      deleteCookie("user_id");
+    } else {
+      createCookie("user_id", userId(), EXPIRE);
+    }
   });
   return [userId, setUserId]
 });
@@ -93,6 +101,10 @@ export const authServer = {
   setToken(token) {
     this.token = token;
     createCookie("auth_token", token, EXPIRE);
+  },
+
+  unsetToken() {
+    deleteCookie("auth_token");
   }
 };
 
@@ -137,5 +149,18 @@ export const resourceServer = {
     if (!(id in this.resources)) this.resources[id] = this.empty;
     this.resources[id].refresh_token = refresh_token;
     createCookie("resource_refresh_" + id, refresh_token, EXPIRE);
+  },
+
+  /** @returns {string[]} */
+  getApiIds() {
+    const ids = [];
+    for (const id in this.resources) ids.push(id);
+    return ids;
+  },
+
+  /** @param {string} id */
+  unsetToken(id) {
+    deleteCookie("resource_token_" + id);
+    deleteCookie("resource_refresh_" + id);
   }
 };

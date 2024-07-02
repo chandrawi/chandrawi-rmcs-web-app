@@ -1,0 +1,30 @@
+{
+  "accelerometer": {
+    "text": "Accelerometer",
+    "device_id": [
+      "5e7c4ea6-b6f3-4198-ae14-9888bf437cf1",
+      "b76a8ef4-52cf-4c18-9d6b-abcff383d822",
+      "45cb6c63-d895-4382-bc62-ad113ae0dd24",
+      "4dd2c477-b2f3-4565-8403-29093127b202",
+      "3676235b-195d-4c63-bfc4-f9abb1590d77"
+    ]
+  },
+  "piezometer": {
+    "text": "Piezometer",
+    "device_id": [
+      "d86ab73a-9b02-4117-9bb9-8e900c859396"
+    ]
+  },
+  "rain_gauge": {
+    "text": "Rain gauge",
+    "device_id": [
+      "ff38c507-73ea-49bd-8093-51f5f052cb72"
+    ]
+  },
+  "environment": {
+    "text": "Environment sensor",
+    "device_id": [
+      "2ec7f527-2377-4a10-ae57-c590eafd07f1"
+    ]
+  }
+}

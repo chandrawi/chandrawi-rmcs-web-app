@@ -1,12 +1,14 @@
 import { createResource } from "solid-js";
 import { useParams } from "@solidjs/router";
-import { read_group_device } from "rmcs-api-client";
+import { list_group_device_by_ids } from "rmcs-api-client";
 import { resourceServer, DEFAULT_DASHBOARD } from "../../store";
+import Breadcrumb from "../navigation/Breadcrumb";
 
 export default function Analysis() {
 
-  const dashboardName = () => useParams().name ? useParams().name : DEFAULT_DASHBOARD;
-  const sensorType = () => useParams().submenu;
+  const dashboardName = () => useParams().name ? decodeURI(useParams().name) : DEFAULT_DASHBOARD;
+  const analysisType = () => useParams().submenu ? decodeURI(useParams().submenu) : undefined;
+  const analysisName = () => useParams().rest ? decodeURI(useParams().rest).split("/")[0] : undefined;
 
   const [dashboard] = createResource(dashboardName, async (name) => {
     const response = await fetch(`/data/dashboard/${name}/dashboard.json`);
@@ -21,7 +23,7 @@ export default function Analysis() {
   const [analyses] = createResource(dashboard, async (dashboard) => {
     const response = await fetch(`/data/dashboard/${dashboard.name}/analysis.json`);
     /**
-     * @type {Object.<string, { text:string, group_id:string }>}
+     * @type {Object.<string, { text:string, model_id:string, group_id:string }>}
      */
     const analyses = await response.json();
     return analyses;
@@ -30,29 +32,44 @@ export default function Analysis() {
   const [groups] = createResource(analyses, async (analyses) => {
     const groups = {};
     for (const type in analyses) {
-      groups[type] = [];
-      for (const id of analyses[type].group_id) {
-        const device = await read_group_device(resourceServer.get(dashboard().api_id), { id: id });
-        if (device) {
-          groups[type].push(device);
-        }
-      }
+      const groupList = await list_group_device_by_ids(resourceServer.get(dashboard().api_id), { ids: analyses[type].group_id });
+      if (groupList) groups[type] = groupList;
     }
     return groups;
   });
 
-  const submenuText = () => {
-    const groups = analyses();
-    const ty = sensorType();
-    if (groups) {
-      if (ty in groups) {
-        return groups[ty].text
+  const children1 = () => {
+    const items = analyses();
+    if (items) {
+      return Object.keys(items).map((key) => { 
+        return {
+          name: key, 
+          text: items[key].text
+        }; 
+      });
+    }
+  };
+
+  const children2 = () => {
+    const items = groups();
+    const children2 = [];
+    if (items) {
+      for (const type in items) {
+        for (const device of items[type]) {
+          children2.push({
+            parent: type,
+            name: device.name,
+            text: device.name
+          })
+        }
       }
+      return children2;
     }
   };
 
   return (
     <>
+    <Breadcrumb dashboard={dashboardName()} parent={{ name: "analysis", text: "Analysis" }} children1={children1()} children2={children2()} child1={analysisType()} child2={analysisName()} />
     </>
   );
 }

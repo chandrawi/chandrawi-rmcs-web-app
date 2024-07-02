@@ -3,6 +3,10 @@ import Index from "./components/Index";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/auth/Login";
 import Logout from "./components/auth/Logout";
+import Overview from "./components/dashboard/Overview";
+import Information from "./components/dashboard/Information";
+import Sensor from "./components/dashboard/Sensor";
+import Analysis from "./components/dashboard/Analysis";
 import { darkTheme, authServer, resourceServer } from "./store";
 
 function App() {
@@ -27,10 +31,17 @@ function App() {
           <Route path="/logout" component={Logout} />
         </Route>
         <Route path="/dashboard" component={Dashboard} />
-        <Route path="/dashboard/:id" component={Dashboard} />
-        <Route path="/dashboard/:id/:menu" component={Dashboard} />
-        <Route path="/dashboard/:id/:menu/:submenu" component={Dashboard} />
-        <Route path="/dashboard/:id/:menu/:submenu/*rest" component={Dashboard} />
+        <Route path="/dashboard" component={Dashboard}>
+          <Route path="/:name" component={Overview} />
+          <Route path="/:name/overview" component={Overview} />
+          <Route path="/:name/information" component={Information} />
+          <Route path="/:name/sensor" component={Sensor} />
+          <Route path="/:name/sensor/:submenu" component={Sensor} />
+          <Route path="/:name/sensor/:submenu/*rest" component={Sensor} />
+          <Route path="/:name/analysis" component={Analysis} />
+          <Route path="/:name/analysis/:submenu" component={Analysis} />
+          <Route path="/:name/analysis/:submenu/*rest" component={Analysis} />
+        </Route>
       </Router>
     </div>
   );

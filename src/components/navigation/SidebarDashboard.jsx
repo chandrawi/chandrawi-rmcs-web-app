@@ -1,11 +1,15 @@
 import { For, Show, createResource } from "solid-js";
+import { useParams } from "@solidjs/router";
+import { DEFAULT_DASHBOARD } from "../../store";
 import PageMenu from "./PageMenu";
 import PortalMenu from "./PortalMenu";
 
 export default function SidebarDashboard() {
 
-  const [flatmenus] = createResource(async () => {
-    const response = await fetch("/data/dashboard_menu.json");
+  const dashboardName = () => useParams().name ? useParams().name : DEFAULT_DASHBOARD;
+
+  const [flatmenus] = createResource(dashboardName, async (name) => {
+    const response = await fetch(`/data/dashboard/${name}/menu.json`);
     return response.json().then((data) => {
       const menus = [], submenus = [];
       for (const row of data) {

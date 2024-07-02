@@ -1,14 +1,24 @@
 import { Show, For } from "solid-js";
-import { useParams } from "@solidjs/router";
+import { useLocation } from "@solidjs/router";
+import { DEFAULT_DASHBOARD, DEFAULT_MENU } from "../../store";
 
 export default function PageMenu(props) {
 
-  const isActive = () => useParams().menu === props.menu.name;
-  const isActiveSub = (name) => useParams().submenu === name;
+  function path() {
+    const path = useLocation().pathname.split("/");
+    return {
+      name: path[2] ? path[2] : DEFAULT_DASHBOARD,
+      menu: path[3] ? path[3] : DEFAULT_MENU,
+      submenu: path[4],
+      rest: path.splice(5)
+    }
+  }
+
+  const isActive = () => path().menu === props.menu.name;
+  const isActiveSub = (name) => path().submenu === name;
 
   const setLink = (menu, submenu) => {
-    const dashboardId = useParams().id ? useParams().id : "0";
-    return "/dashboard/" + [dashboardId, menu, submenu].join("/")
+    return "/dashboard/" + [path().name, menu, submenu].join("/")
   };
 
   return (

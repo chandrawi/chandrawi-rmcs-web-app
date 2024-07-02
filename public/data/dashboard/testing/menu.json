@@ -8,8 +8,8 @@
 }, {
   "id": 1,
   "parent_id": 1,
-  "name": "status",
-  "text": "Status",
+  "name": "information",
+  "text": "Information",
   "icon": "icon-information",
   "link": ""
 }, {

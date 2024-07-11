@@ -1,30 +1,34 @@
 {
   "accelerometer": {
     "text": "Accelerometer",
-    "device_id": [
-      "5e7c4ea6-b6f3-4198-ae14-9888bf437cf1",
-      "b76a8ef4-52cf-4c18-9d6b-abcff383d822",
-      "45cb6c63-d895-4382-bc62-ad113ae0dd24",
-      "4dd2c477-b2f3-4565-8403-29093127b202",
-      "3676235b-195d-4c63-bfc4-f9abb1590d77"
-    ]
+    "model_id": "9d93adb9-4a93-4e26-998c-26349d9932a8",
+    "device_id": {
+      "Accelerometer_1": "5e7c4ea6-b6f3-4198-ae14-9888bf437cf1",
+      "Accelerometer_2": "b76a8ef4-52cf-4c18-9d6b-abcff383d822",
+      "Accelerometer_3": "45cb6c63-d895-4382-bc62-ad113ae0dd24",
+      "Accelerometer_4": "4dd2c477-b2f3-4565-8403-29093127b202",
+      "Accelerometer_5": "3676235b-195d-4c63-bfc4-f9abb1590d77"
+    }
   },
   "piezometer": {
     "text": "Piezometer",
-    "device_id": [
-      "d86ab73a-9b02-4117-9bb9-8e900c859396"
-    ]
+    "model_id": "91b65b70-c421-42fa-8c54-16fc8bbed445",
+    "device_id": {
+      "Piezometer_1": "d86ab73a-9b02-4117-9bb9-8e900c859396"
+    }
   },
   "rain_gauge": {
     "text": "Rain gauge",
-    "device_id": [
-      "ff38c507-73ea-49bd-8093-51f5f052cb72"
-    ]
+    "model_id": "6a28ad85-0a32-41b8-acb5-ee92a523ec74",
+    "device_id": {
+      "Rain_Gauge_1": "ff38c507-73ea-49bd-8093-51f5f052cb72"
+    }
   },
   "environment": {
     "text": "Environment sensor",
-    "device_id": [
-      "2ec7f527-2377-4a10-ae57-c590eafd07f1"
-    ]
+    "model_id": "939909f1-798d-4073-88eb-e80a3b846e40",
+    "device_id": {
+      "Environment_Sensor_1": "2ec7f527-2377-4a10-ae57-c590eafd07f1"
+    }
   }
 }

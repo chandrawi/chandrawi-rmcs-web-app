@@ -1,8 +1,8 @@
-import { createResource } from "solid-js";
+import { Show, createResource } from "solid-js";
 import { useParams } from "@solidjs/router";
-import { list_device_by_ids } from "rmcs-api-client";
-import { resourceServer, DEFAULT_DASHBOARD } from "../../store";
+import { DEFAULT_DASHBOARD } from "../../store";
 import Breadcrumb from "../navigation/Breadcrumb";
+import ItemList from "./ItemList";
 
 export default function Sensor() {
 
@@ -19,24 +19,31 @@ export default function Sensor() {
     dashboard.name = name;
     return dashboard;
   });
+  const apiId = () => dashboard().api_id;
 
   const [sensors] = createResource(dashboard, async (dashboard) => {
     const response = await fetch(`/data/dashboard/${dashboard.name}/sensor.json`);
     /**
-     * @type {Object.<string, { text:string, model_id:string, device_id:string[] }>}
+     * @type {Object.<string, { text:string, model_id:string, device_id:Object.<string,string> }>}
      */
     const sensors = await response.json();
     return sensors;
   });
 
-  const [devices] = createResource(sensors, async (sensors) => {
-    const devices = {};
-    for (const type in sensors) {
-      const devicesList = await list_device_by_ids(resourceServer.get(dashboard().api_id), { ids: sensors[type].device_id });
-      if (devicesList) devices[type] = devicesList;
+  const sensor = () => {
+    const type = sensorType();
+    const name = sensorName();
+    const sensorMap = sensors();
+    if (type && name && sensorMap) {
+      const filter = Object.keys(sensorMap[type].device_id).filter((deviceName) => deviceName == name);
+      if (filter.length > 0) {
+        return {
+          model_id: sensorMap[type].model_id,
+          device_id: sensorMap[type].device_id[filter[0]]
+        };
+      }
     }
-    return devices;
-  });
+  };
 
   const children1 = () => {
     const items = sensors();
@@ -51,29 +58,26 @@ export default function Sensor() {
   };
 
   const children2 = () => {
-    const items = devices();
+    const items = sensors();
     const children2 = [];
     if (items) {
       for (const type in items) {
-        for (const device of items[type]) {
+        for (const deviceName in items[type].device_id) {
           children2.push({
             parent: type,
-            name: device.name,
-            text: device.name
+            name: deviceName,
+            text: deviceName
           })
         }
       }
-      return children2.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-    });
+      return children2;
     }
   };
 
   return (
     <>
     <Breadcrumb dashboard={dashboardName()} parent={{ name: "sensor", text: "Sensor" }} children1={children1()} children2={children2()} child1={sensorType()} child2={sensorName()} />
+    <ItemList apiId={apiId()} devices={sensors} type={sensorType()} />
     </>
   );
 }

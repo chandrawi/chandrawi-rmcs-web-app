@@ -1,8 +1,8 @@
 import { createResource } from "solid-js";
 import { useParams } from "@solidjs/router";
-import { list_group_device_by_ids } from "rmcs-api-client";
-import { resourceServer, DEFAULT_DASHBOARD } from "../../store";
+import { DEFAULT_DASHBOARD } from "../../store";
 import Breadcrumb from "../navigation/Breadcrumb";
+import ItemList from "./ItemList";
 
 export default function Analysis() {
 
@@ -19,24 +19,31 @@ export default function Analysis() {
     dashboard.name = name;
     return dashboard;
   });
+  const apiId = () => dashboard().api_id;
 
   const [analyses] = createResource(dashboard, async (dashboard) => {
     const response = await fetch(`/data/dashboard/${dashboard.name}/analysis.json`);
     /**
-     * @type {Object.<string, { text:string, model_id:string, group_id:string }>}
+     * @type {Object.<string, { text:string, model_id:string, group_id:Object.<string,string> }>}
      */
     const analyses = await response.json();
     return analyses;
   });
 
-  const [groups] = createResource(analyses, async (analyses) => {
-    const groups = {};
-    for (const type in analyses) {
-      const groupList = await list_group_device_by_ids(resourceServer.get(dashboard().api_id), { ids: analyses[type].group_id });
-      if (groupList) groups[type] = groupList;
+  const analysis = () => {
+    const type = analysisType();
+    const name = analysisName();
+    const analysisMap = analyses();
+    if (type && name && analysisMap) {
+      const filter = Object.keys(analysisMap[type].group_id).filter((deviceName) => deviceName == name);
+      if (filter.length > 0) {
+        return {
+          model_id: analysisMap[type].model_id,
+          group_id: analysisMap[type].group_id[filter[0]]
+        };
+      }
     }
-    return groups;
-  });
+  };
 
   const children1 = () => {
     const items = analyses();
@@ -51,15 +58,15 @@ export default function Analysis() {
   };
 
   const children2 = () => {
-    const items = groups();
+    const items = analyses();
     const children2 = [];
     if (items) {
       for (const type in items) {
-        for (const device of items[type]) {
+        for (const groupName in items[type].group_id) {
           children2.push({
             parent: type,
-            name: device.name,
-            text: device.name
+            name: groupName,
+            text: groupName
           })
         }
       }
@@ -70,6 +77,7 @@ export default function Analysis() {
   return (
     <>
     <Breadcrumb dashboard={dashboardName()} parent={{ name: "analysis", text: "Analysis" }} children1={children1()} children2={children2()} child1={analysisType()} child2={analysisName()} />
+    <ItemList apiId={apiId()} groups={analyses} type={analysisType()} />
     </>
   );
 }

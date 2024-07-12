@@ -8,6 +8,11 @@
       "Accelerometer_3": "45cb6c63-d895-4382-bc62-ad113ae0dd24",
       "Accelerometer_4": "4dd2c477-b2f3-4565-8403-29093127b202",
       "Accelerometer_5": "3676235b-195d-4c63-bfc4-f9abb1590d77"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph"
     }
   },
   "piezometer": {
@@ -15,6 +20,11 @@
     "model_id": "91b65b70-c421-42fa-8c54-16fc8bbed445",
     "device_id": {
       "Piezometer_1": "d86ab73a-9b02-4117-9bb9-8e900c859396"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph"
     }
   },
   "rain_gauge": {
@@ -22,6 +32,11 @@
     "model_id": "6a28ad85-0a32-41b8-acb5-ee92a523ec74",
     "device_id": {
       "Rain_Gauge_1": "ff38c507-73ea-49bd-8093-51f5f052cb72"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph"
     }
   },
   "environment": {
@@ -29,6 +44,11 @@
     "model_id": "939909f1-798d-4073-88eb-e80a3b846e40",
     "device_id": {
       "Environment_Sensor_1": "2ec7f527-2377-4a10-ae57-c590eafd07f1"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph"
     }
   }
 }

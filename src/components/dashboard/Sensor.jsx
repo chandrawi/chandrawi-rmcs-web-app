@@ -3,12 +3,14 @@ import { useParams } from "@solidjs/router";
 import { DEFAULT_DASHBOARD } from "../../store";
 import Breadcrumb from "../navigation/Breadcrumb";
 import ItemList from "./ItemList";
+import SensorData from "./SensorData";
 
 export default function Sensor() {
 
-  const dashboardName = () => useParams().name ? decodeURI(useParams().name) : DEFAULT_DASHBOARD;
-  const sensorType = () => useParams().submenu ? decodeURI(useParams().submenu) : undefined;
-  const sensorName = () => useParams().rest ? decodeURI(useParams().rest).split("/")[0] : undefined;
+  const params = useParams();
+  const dashboardName = () => params.name ? params.name : DEFAULT_DASHBOARD;
+  const sensorType = () => params.submenu ? params.submenu : undefined;
+  const sensorName = () => params.rest ? params.rest.split("/")[0] : undefined;
 
   const [dashboard] = createResource(dashboardName, async (name) => {
     const response = await fetch(`/data/dashboard/${name}/dashboard.json`);
@@ -24,7 +26,7 @@ export default function Sensor() {
   const [sensors] = createResource(dashboard, async (dashboard) => {
     const response = await fetch(`/data/dashboard/${dashboard.name}/sensor.json`);
     /**
-     * @type {Object.<string, { text:string, model_id:string, device_id:Object.<string,string> }>}
+     * @type {Object.<string, { text:string, model_id:string, model_index:number[], device_id:Object.<string,string>, config:Object }>}
      */
     const sensors = await response.json();
     return sensors;
@@ -39,7 +41,9 @@ export default function Sensor() {
       if (filter.length > 0) {
         return {
           model_id: sensorMap[type].model_id,
-          device_id: sensorMap[type].device_id[filter[0]]
+          model_index: sensorMap[type].model_index,
+          device_id: sensorMap[type].device_id[filter[0]],
+          config: sensorMap[type].config
         };
       }
     }
@@ -77,7 +81,11 @@ export default function Sensor() {
   return (
     <>
     <Breadcrumb dashboard={dashboardName()} parent={{ name: "sensor", text: "Sensor" }} children1={children1()} children2={children2()} child1={sensorType()} child2={sensorName()} />
-    <ItemList apiId={apiId()} devices={sensors} type={sensorType()} />
+    <Show when={sensor()} fallback={
+      <ItemList apiId={apiId()} devices={sensors} type={sensorType()} />
+    }>
+      <SensorData name={sensorName()} apiId={apiId()} sensor={sensor} />
+    </Show>
     </>
   );
 }

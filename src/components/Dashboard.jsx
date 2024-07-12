@@ -6,7 +6,7 @@ export default function Dashboard(props) {
     <>
     <input id="sidebar" type="checkbox" class="drawer-toggle" />
     <NavbarDashboard />
-    <div class="drawer-content mt-[3.5rem] pt-1.5 px-1.5 bg-slate-50 dark:bg-slate-800 overflow-auto scrollbar-custom">
+    <div class="drawer-content mt-[3.5rem] px-1.5 py-1.5 bg-slate-50 dark:bg-slate-800 text-gray-800 dark:text-gray-200 overflow-auto scrollbar-custom">
       {props.children}
     </div>
     <div class="drawer-side overflow-hidden">

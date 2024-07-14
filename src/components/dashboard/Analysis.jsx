@@ -6,9 +6,10 @@ import ItemList from "./ItemList";
 
 export default function Analysis() {
 
-  const dashboardName = () => useParams().name ? decodeURI(useParams().name) : DEFAULT_DASHBOARD;
-  const analysisType = () => useParams().submenu ? decodeURI(useParams().submenu) : undefined;
-  const analysisName = () => useParams().rest ? decodeURI(useParams().rest).split("/")[0] : undefined;
+  const params = useParams();
+  const dashboardName = () => params.name ? params.name : DEFAULT_DASHBOARD;
+  const analysisType = () => params.submenu ? params.submenu : undefined;
+  const analysisName = () => params.rest ? params.rest.split("/")[0] : undefined;
 
   const [dashboard] = createResource(dashboardName, async (name) => {
     const response = await fetch(`/data/dashboard/${name}/dashboard.json`);
@@ -38,8 +39,12 @@ export default function Analysis() {
       const filter = Object.keys(analysisMap[type].group_id).filter((deviceName) => deviceName == name);
       if (filter.length > 0) {
         return {
+          name: name,
+          icon: analysisMap[type].icon,
           model_id: analysisMap[type].model_id,
-          group_id: analysisMap[type].group_id[filter[0]]
+          model_index: analysisMap[type].model_index,
+          group_id: analysisMap[type].group_id[filter[0]],
+          config: analysisMap[type].config
         };
       }
     }
@@ -74,10 +79,28 @@ export default function Analysis() {
     }
   };
 
+  const itemListConfig = () => {
+    let text = "Analysis";
+    let icon = "icon-analysis";
+    const analysisMap = analyses();
+    const type = analysisType();
+    if (analysisMap) if (type in analysisMap) {
+      text = analysisMap[type].text;
+      icon = analysisMap[type].icon;
+    }
+    return {
+      dashboard: dashboardName(),
+      menu: "analysis",
+      type: analysisType(),
+      text: text,
+      icon: icon
+    };
+  };
+
   return (
     <>
     <Breadcrumb dashboard={dashboardName()} parent={{ name: "analysis", text: "Analysis" }} children1={children1()} children2={children2()} child1={analysisType()} child2={analysisName()} />
-    <ItemList apiId={apiId()} groups={analyses} type={analysisType()} />
+    <ItemList apiId={apiId()} groups={analyses} config={itemListConfig()} />
     </>
   );
 }

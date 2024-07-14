@@ -80,11 +80,29 @@ export default function Sensor() {
     }
   };
 
+  const itemListConfig = () => {
+    let text = "Sensor";
+    let icon = "icon-sensor_device";
+    const sensorMap = sensors();
+    const type = sensorType();
+    if (sensorMap) if (type in sensorMap) {
+      text = sensorMap[type].text;
+      icon = sensorMap[type].icon;
+    }
+    return {
+      dashboard: dashboardName(),
+      menu: "sensor",
+      type: sensorType(),
+      text: text,
+      icon: icon
+    };
+  };
+
   return (
     <>
     <Breadcrumb dashboard={dashboardName()} parent={{ name: "sensor", text: "Sensor" }} children1={children1()} children2={children2()} child1={sensorType()} child2={sensorName()} />
     <Show when={sensor()} fallback={
-      <ItemList apiId={apiId()} devices={sensors} type={sensorType()} />
+      <ItemList apiId={apiId()} devices={sensors} config={itemListConfig()} />
     }>
       <SensorData apiId={apiId()} sensor={sensor} />
     </Show>

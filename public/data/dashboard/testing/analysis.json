@@ -1,14 +1,17 @@
 {
   "soil_inclinometer": {
     "text": "Soil inclinometer",
+    "icon": "icon-list_square",
     "model_id": "9d93adb9-4a93-4e26-998c-26349d9932a8",
+    "model_index": [0, 1, 2],
     "group_id": {
       "Soil_Inclinometer": "ba4f7f60-d41b-453b-93ee-e8e0f0083c7a"
     },
     "config": {
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
-      "view_mode": "graph"
+      "view_mode": "graph",
+      "float_precission": 3
     }
   }
 }

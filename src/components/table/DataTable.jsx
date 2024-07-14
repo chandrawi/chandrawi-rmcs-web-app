@@ -105,6 +105,12 @@ export default function DataTable(props) {
     return value;
   }
 
+  const align = (col) => {
+    if (props.columns[col].align == "left") return "justify-left";
+    else if (props.columns[col].align == "right") return "justify-right";
+    return "justify-center"
+  }
+
   return (
     <>
     <table class="w-full">
@@ -113,7 +119,7 @@ export default function DataTable(props) {
           <For each={columnList()}>
           {(col) => (
             <th class="px-3 py-1.5 font-semibold">
-              <div class="flex flex-row items-center justify-center">
+              <div class={"flex flex-row items-center " + align(col)}>
                 <span>{ props.columns[col].content }</span>
                 <Show when={sortableList()[col]}>
                   <button class="flex flex-col ml-1 my-auto text-xs leading-none">
@@ -134,11 +140,21 @@ export default function DataTable(props) {
       <tbody class="text-xs sm:text-sm">
         <For each={pageData()}>
         {(row) => (
-          <tr class="even:bg-gray-50 border-b border-gray-100 dark:border-gray-800 dark:even:bg-gray-800">
+          <tr class={"even:bg-gray-50 border-b border-gray-100 dark:border-gray-700 dark:even:bg-gray-800"
+            + (row.__link__ ? " hover:bg-sky-50 dark:hover:bg-sky-950 cursor-pointer" : "")
+          }>
             <For each={columnList()}>
             {(col) => (
               <td class="px-2 py-1 text-left">
-                <span class="flex justify-center">{ dataValue(row[col], col) }</span>
+                <Show when={props.columns[col].html} fallback={
+                  <a href={row.__link__} class={"flex " + align(col)}>
+                    { dataValue(row[col], col) }
+                  </a>
+                }>
+                  <a href={row.__link__}>
+                    {row[col]}
+                  </a>
+                </Show>
               </td>
             )}
             </For>

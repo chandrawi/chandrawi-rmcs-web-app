@@ -1,7 +1,9 @@
 {
   "accelerometer": {
     "text": "Accelerometer",
+    "icon": "icon-list_square",
     "model_id": "9d93adb9-4a93-4e26-998c-26349d9932a8",
+    "model_index": [0, 1, 2],
     "device_id": {
       "Accelerometer_1": "5e7c4ea6-b6f3-4198-ae14-9888bf437cf1",
       "Accelerometer_2": "b76a8ef4-52cf-4c18-9d6b-abcff383d822",
@@ -12,24 +14,30 @@
     "config": {
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
-      "view_mode": "graph"
+      "view_mode": "graph",
+      "float_precission": 3
     }
   },
   "piezometer": {
     "text": "Piezometer",
+    "icon": "icon-list_square",
     "model_id": "91b65b70-c421-42fa-8c54-16fc8bbed445",
+    "model_index": [0, 1],
     "device_id": {
       "Piezometer_1": "d86ab73a-9b02-4117-9bb9-8e900c859396"
     },
     "config": {
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
-      "view_mode": "graph"
+      "view_mode": "graph",
+      "float_precission": 3
     }
   },
   "rain_gauge": {
     "text": "Rain gauge",
+    "icon": "icon-list_square",
     "model_id": "6a28ad85-0a32-41b8-acb5-ee92a523ec74",
+    "model_index": [0, 1, 2, 3],
     "device_id": {
       "Rain_Gauge_1": "ff38c507-73ea-49bd-8093-51f5f052cb72"
     },
@@ -41,14 +49,17 @@
   },
   "environment": {
     "text": "Environment sensor",
+    "icon": "icon-list_square",
     "model_id": "939909f1-798d-4073-88eb-e80a3b846e40",
+    "model_index": [0, 1, 2],
     "device_id": {
       "Environment_Sensor_1": "2ec7f527-2377-4a10-ae57-c590eafd07f1"
     },
     "config": {
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
-      "view_mode": "graph"
+      "view_mode": "graph",
+      "float_precission": 3
     }
   }
 }

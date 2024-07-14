@@ -15,6 +15,9 @@
   html {
     scrollbar-width: none;
   }
+  .scrollbar-gutter-auto {
+    scrollbar-gutter: auto !important;
+  }
   .scrollbar-custom {
     scrollbar-gutter: stable;
     scrollbar-color: transparent transparent;

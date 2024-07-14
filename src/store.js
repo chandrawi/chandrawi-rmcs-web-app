@@ -166,3 +166,26 @@ export const resourceServer = {
     deleteCookie("resource_refresh_" + id);
   }
 };
+
+function zeropad(input, num) {
+  let output = String(input);
+  for (let i = output.length; i<num; i++) {
+    output = "0" + output;
+  }
+  return output;
+}
+
+/**
+ * @param {Date} datetime
+ * @returns {string}
+ */
+export function dateToString(datetime) {
+  return (
+    zeropad(datetime.getFullYear(), 4) + "-" + 
+    zeropad(datetime.getMonth() + 1, 2) + "-" +
+    zeropad(datetime.getDate(), 2) + " " +
+    zeropad(datetime.getHours(), 2) + ":" +
+    zeropad(datetime.getMinutes(), 2) + ":" +
+    zeropad(datetime.getSeconds(), 2)
+  );
+}

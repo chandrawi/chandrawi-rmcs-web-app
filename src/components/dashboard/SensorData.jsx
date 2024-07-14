@@ -1,7 +1,8 @@
 import { For, createSignal, createResource, createEffect } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import { read_model, list_data_by_last_time, list_data_by_range_time } from "rmcs-api-client";
-import { resourceServer } from "../../store";
+import { resourceServer, dateToString } from "../../store";
+import DataTable from "../table/DataTable";
 
 export default function SensorData(props) {
 
@@ -46,6 +47,50 @@ export default function SensorData(props) {
       });
     }
   });
+
+  function columns() {
+    if (props.sensor() && model()) {
+      const configs = model().configs;
+      const indexes = props.sensor().model_index;
+      const cols = {
+        time: { content: "Timestamp", sortable: true, align: "left" }
+      };
+      for (const i in configs) {
+        if (indexes.includes(parseInt(i))) {
+          const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf);
+          const symbol = configs[i].filter((conf) => conf.name == "symbol").reduce((_, conf) => conf);
+          cols[scale.value] = {
+            content: scale.value + " [" + symbol.value + "]",
+            sortable: true,
+            float_precission: config("float_precission")
+          }
+        }
+      }
+      return cols;
+    }
+  }
+
+  function dataTable() {
+    if (props.sensor() && model() && data()) {
+      const configs = model().configs;
+      const indexes = props.sensor().model_index;
+      const dataTable = [];
+      for (const dataschema of data()) {
+        const dataRow = {
+          time: dateToString(dataschema.timestamp)
+        };
+        for (const i in dataschema.data) {
+          if (indexes.includes(parseInt(i))) {
+            const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf);
+            let value = dataschema.data[i];
+            dataRow[scale.value] = value;
+          }
+        }
+        dataTable.push(dataRow);
+      }
+      return dataTable;
+    }
+  }
 
   let selectTimeMode;
   let selectRange;
@@ -109,12 +154,13 @@ export default function SensorData(props) {
   }
 
   return (
+    <>
     <div class="w-full xs:px-1 py-1">
       <div class="w-full max-w-[48rem] xs:rounded-sm border border-slate-200 dark:border-slate-700">
         <div class="w-full flex flex-row items-center justify-between bg-gray-100 dark:bg-gray-800">
           <div class="mx-2 my-1.5 flex flex-row items-center font-semibold">
-            <span class="icon-list_square text-[1.75rem] align-middle"></span>
-            <span class="ml-1 align-middle">{props.name}</span>
+            <span class={(props.sensor().icon ? props.sensor().icon : "icon-list_square") + " text-[1.5rem] align-middle"}></span>
+            <span class="ml-1 align-middle">{props.sensor().name}&nbsp;</span>
           </div>
           <div class="mx-3 my-auto flex flex-row text-sm">
             <button class={"px-2 py-0.5 text-gray-100 rounded-l-sm " 
@@ -176,5 +222,19 @@ export default function SensorData(props) {
         </div>
       </div>
     </div>
+
+    <div class="w-full xs:px-1 py-1 overflow-hidden">
+      <div class="w-full max-w-[48rem] xs:rounded-sm border border-slate-200 dark:border-slate-700">
+        <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
+          <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
+            <span class="align-middle text-sm leading-6">{props.sensor().name}&nbsp;</span>
+          </div>
+        </div>
+        <div class="w-full xs:px-4 py-2 bg-white dark:bg-gray-900 text-sm overflow-x-auto scrollbar-custom scrollbar-gutter-auto">
+          <DataTable columns={columns()} data={dataTable()} />
+        </div>
+      </div>
+    </div>
+    </>
   );
 }

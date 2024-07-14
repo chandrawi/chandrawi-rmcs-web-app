@@ -40,6 +40,8 @@ export default function Sensor() {
       const filter = Object.keys(sensorMap[type].device_id).filter((deviceName) => deviceName == name);
       if (filter.length > 0) {
         return {
+          name: name,
+          icon: sensorMap[type].icon,
           model_id: sensorMap[type].model_id,
           model_index: sensorMap[type].model_index,
           device_id: sensorMap[type].device_id[filter[0]],
@@ -84,7 +86,7 @@ export default function Sensor() {
     <Show when={sensor()} fallback={
       <ItemList apiId={apiId()} devices={sensors} type={sensorType()} />
     }>
-      <SensorData name={sensorName()} apiId={apiId()} sensor={sensor} />
+      <SensorData apiId={apiId()} sensor={sensor} />
     </Show>
     </>
   );

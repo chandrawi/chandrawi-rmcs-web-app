@@ -1,8 +1,9 @@
-import { For, createSignal, createResource, createEffect } from "solid-js";
+import { Show, For, createSignal, createResource, createEffect } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import { read_model, list_data_by_last_time, list_data_by_range_time } from "rmcs-api-client";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
+import TimeChart from "../chart/TimeChart";
 
 export default function SensorData(props) {
 
@@ -53,14 +54,14 @@ export default function SensorData(props) {
       const configs = model().configs;
       const indexes = props.sensor().model_index;
       const cols = {
-        time: { content: "Timestamp", sortable: true, align: "left" }
+        ts: { content: "Timestamp", sortable: true, align: "left" }
       };
       for (const i in configs) {
         if (indexes.includes(parseInt(i))) {
-          const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf);
-          const symbol = configs[i].filter((conf) => conf.name == "symbol").reduce((_, conf) => conf);
-          cols[scale.value] = {
-            content: scale.value + " [" + symbol.value + "]",
+          const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
+          const symbol = configs[i].filter((conf) => conf.name == "symbol").reduce((_, conf) => conf).value;
+          cols[scale] = {
+            content: scale + " [" + symbol + "]",
             sortable: true,
             float_precission: config("float_precission")
           }
@@ -77,19 +78,64 @@ export default function SensorData(props) {
       const dataTable = [];
       for (const dataschema of data()) {
         const dataRow = {
-          time: dateToString(dataschema.timestamp)
+          ts: dateToString(dataschema.timestamp)
         };
         for (const i in dataschema.data) {
           if (indexes.includes(parseInt(i))) {
-            const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf);
+            const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
             let value = dataschema.data[i];
-            dataRow[scale.value] = value;
+            dataRow[scale] = value;
           }
         }
         dataTable.push(dataRow);
       }
       return dataTable;
     }
+  }
+
+  function dataCharts() {
+    if (props.sensor() && model() && data()) {
+      const configs = model().configs;
+      const indexes = props.sensor().model_index;
+      const dataCharts = {};
+      for (const dataschema of data()) {
+        for (const i in dataschema.data) {
+          const dataRow = {
+            ts: dateToString(dataschema.timestamp)
+          };
+          if (indexes.includes(parseInt(i))) {
+            const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
+            let value = dataschema.data[i];
+            dataRow[scale] = value;
+            if (dataCharts[scale] === undefined) dataCharts[scale] = [];
+            dataCharts[scale].push(dataRow);
+          }
+        }
+      }
+      return dataCharts;
+    }
+  }
+
+  function itemCharts() {
+    if (props.sensor() && model() && dataCharts()) {
+      const configs = model().configs;
+      const indexes = props.sensor().model_index;
+      const items = [];
+      for (const i in configs) {
+        const indexOfIndexes = indexes.findIndex((index) => index == i);
+        if (indexes.includes(parseInt(i))) {
+          const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
+          const symbol = configs[i].filter((conf) => conf.name == "symbol").reduce((_, conf) => conf).value;
+          items.push({
+            scale: scale,
+            content: scale + " [" + symbol + "]",
+            range: config("chart_value_range") ? config("chart_value_range")[indexOfIndexes] : undefined
+          })
+        }
+      }
+      return items;
+    }
+    return [];
   }
 
   let selectTimeMode;
@@ -223,18 +269,43 @@ export default function SensorData(props) {
       </div>
     </div>
 
-    <div class="w-full xs:px-1 py-1 overflow-hidden">
-      <div class="w-full max-w-[48rem] xs:rounded-sm border border-slate-200 dark:border-slate-700">
-        <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
-          <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
-            <span class="align-middle text-sm leading-6">{props.sensor().name}&nbsp;</span>
+    <Show when={viewMode() == "graph"}>
+      <div class="w-full flex flex-row flex-wrap">
+        <For each={itemCharts()}>
+        {(item) => (
+          <div class="w-full xl:w-1/2 xs:px-1 py-1 max-w-[36rem]">
+            <div class="xs:rounded-sm border border-slate-200 dark:border-slate-700">
+              <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
+                <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
+                  <span class="align-middle text-sm">{props.sensor().name}&nbsp;</span>
+                  <span class="icon-chevron_right align-middle text-[0.875rem]"></span>
+                  <span class="align-middle text-sm">&nbsp;{item.content}</span>
+                </div>
+              </div>
+              <div class="p-3 bg-white dark:bg-gray-900">
+                <TimeChart data={dataCharts()[item.scale]} timestampColumn="ts" valueColumn={item.scale} valueRange={item.range} />
+              </div>
+            </div>
+          </div>
+        )}
+        </For>
+      </div>
+    </Show>
+
+    <Show when={viewMode() == "table"}>
+      <div class="w-full xs:px-1 py-1 overflow-hidden">
+        <div class="w-full max-w-[48rem] xs:rounded-sm border border-slate-200 dark:border-slate-700">
+          <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
+            <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
+              <span class="align-middle text-sm leading-6">{props.sensor().name}&nbsp;</span>
+            </div>
+          </div>
+          <div class="w-full xs:px-4 py-2 bg-white dark:bg-gray-900 text-sm overflow-x-auto scrollbar-custom scrollbar-gutter-auto">
+            <DataTable columns={columns()} data={dataTable()} />
           </div>
         </div>
-        <div class="w-full xs:px-4 py-2 bg-white dark:bg-gray-900 text-sm overflow-x-auto scrollbar-custom scrollbar-gutter-auto">
-          <DataTable columns={columns()} data={dataTable()} />
-        </div>
       </div>
-    </div>
+    </Show>
     </>
   );
 }

@@ -189,3 +189,19 @@ export function dateToString(datetime) {
     zeropad(datetime.getSeconds(), 2)
   );
 }
+
+/**
+ * @param {string} timestamp 
+ * @returns {Date}
+ */
+export function stringToDate(timestamp) {
+  const splitDate = timestamp.split("-");
+  const year = splitDate[0];
+  const month = splitDate[1];
+  const date = splitDate[2].substring(0, 2);
+  const splitTime = timestamp.split(":");
+  const hour = splitTime[0].substring(splitTime[0].length - 2);
+  const minute = splitTime[1];
+  const second = splitTime[2].substring(0, 2);
+  return new Date(year, month, date, hour, minute, second);
+}

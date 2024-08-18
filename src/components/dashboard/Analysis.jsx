@@ -1,8 +1,9 @@
-import { createResource } from "solid-js";
+import { Switch, Match, createResource } from "solid-js";
 import { useParams } from "@solidjs/router";
 import { DEFAULT_DASHBOARD } from "../../store";
 import Breadcrumb from "../navigation/Breadcrumb";
 import ItemList from "./ItemList";
+import AnalysisInclinometerArray from "../analysis/AnalysisInclinometerArray";
 
 export default function Analysis() {
 
@@ -25,7 +26,7 @@ export default function Analysis() {
   const [analyses] = createResource(dashboard, async (dashboard) => {
     const response = await fetch(`/data/dashboard/${dashboard.name}/analysis.json`);
     /**
-     * @type {Object.<string, { text:string, model_id:string, group_id:Object.<string,string> }>}
+     * @type {Object.<string, { text:string, set_id:Object.<string,string>, config:Object }>}
      */
     const analyses = await response.json();
     return analyses;
@@ -36,14 +37,12 @@ export default function Analysis() {
     const name = analysisName();
     const analysisMap = analyses();
     if (type && name && analysisMap) {
-      const filter = Object.keys(analysisMap[type].group_id).filter((deviceName) => deviceName == name);
+      const filter = Object.keys(analysisMap[type].set_id).filter((deviceName) => deviceName == name);
       if (filter.length > 0) {
         return {
           name: name,
           icon: analysisMap[type].icon,
-          model_id: analysisMap[type].model_id,
-          model_index: analysisMap[type].model_index,
-          group_id: analysisMap[type].group_id[filter[0]],
+          set_id: analysisMap[type].set_id[filter[0]],
           config: analysisMap[type].config
         };
       }
@@ -67,11 +66,11 @@ export default function Analysis() {
     const children2 = [];
     if (items) {
       for (const type in items) {
-        for (const groupName in items[type].group_id) {
+        for (const setName in items[type].set_id) {
           children2.push({
             parent: type,
-            name: groupName,
-            text: groupName
+            name: setName,
+            text: setName
           })
         }
       }
@@ -100,7 +99,13 @@ export default function Analysis() {
   return (
     <>
     <Breadcrumb dashboard={dashboardName()} parent={{ name: "analysis", text: "Analysis" }} children1={children1()} children2={children2()} child1={analysisType()} child2={analysisName()} />
-    <ItemList apiId={apiId()} groups={analyses} config={itemListConfig()} />
+    <Switch fallback={
+      <ItemList apiId={apiId()} sets={analyses} config={itemListConfig()} />
+    }>
+      <Match when={analysis() && analysisType() == "inclinometer_array"}>
+        <AnalysisInclinometerArray apiId={apiId()} analysis={analysis} />
+      </Match>
+    </Switch>
     </>
   );
 }

@@ -57,8 +57,8 @@
 }, {
   "id": 8,
   "parent_id": 7,
-  "name": "soil_inclinometer",
-  "text": "Soil Inclinometer",
+  "name": "inclinometer_array",
+  "text": "Inclinometer Array",
   "icon": "icon-list_square",
   "link": ""
 }, {

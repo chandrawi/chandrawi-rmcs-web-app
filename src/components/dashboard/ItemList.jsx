@@ -1,7 +1,6 @@
 import { createResource, createSignal } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
 import { resourceServer } from "../../store";
-import { list_device_by_ids, list_group_device_by_ids } from "rmcs-api-client";
 import DataTable from "../table/DataTable";
 
 export default function ItemList(props) {
@@ -25,31 +24,11 @@ export default function ItemList(props) {
     }
   };
 
-  const groupMap = () => {
-    if (props.groups) {
-      return props.config.type ? filterItem(props.groups(), props.config.type) : props.groups();
+  const setMap = () => {
+    if (props.sets) {
+      return props.config.type ? filterItem(props.sets(), props.config.type) : props.sets();
     }
   };
-
-  const [devices] = createResource(deviceMap, async (items) => {
-    const devices = {};
-    for (const type in items) {
-      const ids = Object.values(items[type].device_id);
-      const devicesList = await list_device_by_ids(resourceServer.get(props.apiId), { ids: ids });
-      if (devicesList) devices[type] = devicesList;
-    }
-    return devices;
-  });
-
-  const [groups] = createResource(groupMap, async (items) => {
-    const groups = {};
-    for (const type in items) {
-      const ids = Object.values(items[type].group_id);
-      const groupsList = await list_group_device_by_ids(resourceServer.get(props.apiId), { ids: ids });
-      if (groupsList) groups[type] = groupsList;
-    }
-    return groups;
-  });
 
   function columns() {
     return {
@@ -68,7 +47,7 @@ export default function ItemList(props) {
 
   function dataTable() {
     const devicesMap = deviceMap();
-    const groupsMap = groupMap();
+    const setsMap = setMap();
     const dataTable = [];
     if (devicesMap) {
       for (const type in devicesMap) {
@@ -82,12 +61,12 @@ export default function ItemList(props) {
         }
       }
     }
-    if (groupsMap) {
-      for (const type in groupsMap) {
-        for (const name in groupsMap[type].group_id) {
+    if (setsMap) {
+      for (const type in setsMap) {
+        for (const name in setsMap[type].set_id) {
           const dataRow = {
             __link__: "/dashboard/" + [props.config.dashboard, props.config.menu, type, name].join("/"),
-            type: groupsMap[type].text,
+            type: setsMap[type].text,
             name: name
           };
           dataTable.push(dataRow);

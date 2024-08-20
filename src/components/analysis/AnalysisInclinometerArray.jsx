@@ -1,8 +1,9 @@
 import { Show, For, createSignal, createResource, createEffect } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
-import { read_set, read_model, read_device, list_data_set_by_last_time, list_data_set_by_range_time } from "rmcs-api-client";
+import { read_set, read_model, read_device, list_data_set_by_last_time, list_data_set_by_range_time, list_data_set_by_time } from "rmcs-api-client";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
+import LineChart from "../chart/LineChart";
 
 export default function AnalysisSoilInclinometer(props) {
 
@@ -76,17 +77,23 @@ export default function AnalysisSoilInclinometer(props) {
         timestamp: tLast
       });
     }
-    else if (timeMode() == "history") {
+    else if (timeMode() == "history" && dataMode() != "specific") {
       return await list_data_set_by_range_time(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         begin: timeBegin(),
         end: timeEnd()
       });
     }
+    else if (timeMode() == "history" && dataMode() == "specific") {
+      return await list_data_set_by_time(resourceServer.get(props.apiId), {
+        set_id: input.set_id,
+        timestamp: timeSpecific()
+      });
+    }
   });
 
   /**
-   * @returns {{ timestamp: Date|undefined, position: number, data: number[] }[]}
+   * @returns {{ timestamp: Date|undefined, position: number, data: number[], group: string }[]}
    */
   const datasetMap = () => {
     let datasets = dataset();
@@ -119,10 +126,16 @@ export default function AnalysisSoilInclinometer(props) {
         let index = 0;
         for (const member of sets.members) {
           if (dataset.data.length >= (index + member.data_index.length)) {
+            let group = dataMode();
+            if (dataMode() == "old_new") {
+              group = "newest";
+              if (dataset.timestamp == datasets[0].timestamp) group = "oldest";
+            }
             map.push({
               timestamp: dataset.timestamp,
               position: positions[member.device_id],
-              data: dataset.data.slice(index, index + member.data_index.length)
+              data: dataset.data.slice(index, index + member.data_index.length),
+              group: group
             });
           }
           index += member.data_index.length;
@@ -172,22 +185,66 @@ export default function AnalysisSoilInclinometer(props) {
     }
   }
 
+  function dataCharts() {
+    if (datasetMap() && model_config()) {
+      const configs = model_config();
+      const dataCharts = {};
+      for (const dataset of datasetMap()) {
+        for (const i in dataset.data) {
+          const dataRow = {
+            "Data set": dataset.group,
+            Position: dataset.position
+          };
+          const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
+          let value = dataset.data[i];
+          dataRow[scale] = value;
+          if (dataCharts[scale] === undefined) dataCharts[scale] = [];
+          dataCharts[scale].push(dataRow);
+        }
+      }
+      return dataCharts;
+    }
+  }
+
+  function itemCharts() {
+    if (model_config() && dataCharts()) {
+      const configs = model_config();
+      const items = [];
+      const scales = [];
+      for (const i in configs) {
+        const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
+        const symbol = configs[i].filter((conf) => conf.name == "symbol").reduce((_, conf) => conf).value;
+        if (!scales.includes(scale)) {
+          items.push({
+            scale: scale,
+            content: scale + " [" + symbol + "]",
+            range: config("chart_value_range") ? config("chart_value_range")[i] : undefined
+          });
+        }
+        scales.push(scale);
+      }
+      return items;
+    }
+    return [];
+  }
+
   let selectTimeMode;
   let selectDataMode;
   let selectRange;
   let datetimeBegin;
   let datetimeEnd;
+  let datetimeSpecific;
 
   function submitMode(e) {
     e.preventDefault();
-    setDataMode(selectDataMode.value);
     if (selectTimeMode.value == "live") {
       setSearchParams({
         time: "live",
         data: selectDataMode.value,
         last: selectRange.value,
         begin: null,
-        end: null
+        end: null,
+        specific: null
       });
       setTimeLast(parseInt(selectRange.value));
       refetch();
@@ -197,12 +254,16 @@ export default function AnalysisSoilInclinometer(props) {
         time: "history",
         data: selectDataMode.value,
         last: null,
-        begin: datetimeBegin.value,
-        end: datetimeEnd.value
+        begin: dataMode() != "specific" ? datetimeBegin.value : null,
+        end: dataMode() != "specific" ? datetimeEnd.value : null,
+        specific: dataMode() == "specific" ? datetimeSpecific.value : null
       });
       if (datetimeBegin.value && datetimeEnd.value) {
         setTimeBegin(new Date(datetimeBegin.value));
         setTimeEnd(new Date(datetimeEnd.value));
+      }
+      if (datetimeSpecific.value) {
+        setTimeSpecific(new Date(datetimeSpecific.value));
       }
       refetch();
     }
@@ -217,9 +278,11 @@ export default function AnalysisSoilInclinometer(props) {
 
   createEffect(() => {
     if (searchParams.time) selectTimeMode.value = searchParams.time;
+    if (searchParams.data) selectDataMode.value = searchParams.data;
     if (searchParams.last) selectRange.value = searchParams.last;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
     if (searchParams.end) datetimeEnd.value = searchParams.end;
+    if (searchParams.specific) datetimeSpecific.value = searchParams.specific;
   });
 
   const [rangeList, setRangeList] = createSignal([300000, 900000, 1800000, 3600000]);
@@ -236,25 +299,6 @@ export default function AnalysisSoilInclinometer(props) {
     else if(range == 86400000) return "1 day";
     else return String(range / 86400000) + " day(s)";
   }
-
-  // createEffect(() => {
-  //   console.log(set());
-  // });
-  // createEffect(() => {
-  //   console.log(model_config());
-  // });
-  // createEffect(() => {
-  //   console.log(device_config());
-  // });
-  createEffect(() => {
-    console.log(dataset());
-  });
-  createEffect(() => {
-    console.log(datasetMap());
-  });
-  createEffect(() => {
-    console.log(dataTable());
-  });
 
   return (
     <>
@@ -294,16 +338,17 @@ export default function AnalysisSoilInclinometer(props) {
             <div class="mx-1 my-1 flex flex-row">
               <label for="input-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Data</label>
               <select name="data-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
-                ref={selectDataMode}
+                ref={selectDataMode} onChange={() => setDataMode(selectDataMode.value)}
               >
                 <option value="old_new">Old-New</option>
                 <option value="average">Average</option>
                 <option value="all">All</option>
+                <option value="specific" classList={{"hidden": timeMode() != "history"}}>Specific</option>
               </select>
             </div>
             <div class="grow"></div>
             <div class="flex flex-row flex-wrap justify-between">
-              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "live"}}>
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "live" || dataMode() == "specific"}}>
                 <label for="input-last" class="px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Range</label>
                 <select name="time-last" class="px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700"
                   ref={selectRange}
@@ -315,16 +360,22 @@ export default function AnalysisSoilInclinometer(props) {
                   </For>
                 </select>
               </div>
-              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history"}}>
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history" || dataMode() == "specific"}}>
                 <label for="input-begin" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Begin</label>
                 <input type="datetime-local" step="1" name="time-begin" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeBegin}
                 />
               </div>
-              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history"}}>
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history" || dataMode() == "specific"}}>
                 <label for="input-end" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">End</label>
                 <input type="datetime-local" step="1" name="time-end" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeEnd}
+                />
+              </div>
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": dataMode() != "specific"}}>
+                <label for="input-end" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Datetime</label>
+                <input type="datetime-local" step="1" name="time-end" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
+                  ref={datetimeSpecific}
                 />
               </div>
               <div class="grow mx-1 my-1 flex flex-row justify-end">
@@ -335,6 +386,33 @@ export default function AnalysisSoilInclinometer(props) {
         </div>
       </div>
     </div>
+
+    <Show when={viewMode() == "graph"}>
+      <div class="w-full flex flex-row flex-wrap">
+        <For each={itemCharts()}>
+        {(item) => (
+          <div class="w-full xl:w-1/2 xs:px-1 py-1 max-w-[36rem]">
+            <div class="xs:rounded-sm border border-slate-200 dark:border-slate-700">
+              <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
+                <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
+                  <span class="align-middle text-sm">{props.analysis().name}&nbsp;</span>
+                  <span class="icon-chevron_right align-middle text-[0.875rem]"></span>
+                  <span class="align-middle text-sm">&nbsp;{item.content}</span>
+                </div>
+              </div>
+              <div class="p-3 bg-white dark:bg-gray-900">
+                <Show when={config("chart_domain") == "y"} fallback={
+                  <LineChart data={dataCharts()[item.scale]} domain="Position" xColumn="Position" yColumn={item.scale} yRange={item.range} />
+                }>
+                  <LineChart data={dataCharts()[item.scale]} domain="Position" yColumn="Position" xColumn={item.scale} xRange={item.range} />
+                </Show>
+              </div>
+            </div>
+          </div>
+        )}
+        </For>
+      </div>
+    </Show>
 
     <Show when={viewMode() == "table"}>
       <div class="w-full xs:px-1 py-1 overflow-hidden">

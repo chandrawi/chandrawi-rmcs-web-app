@@ -10,7 +10,8 @@
       "live_range": 3600000,
       "view_mode": "graph",
       "float_precission": 3,
-      "chart_value_range": [[0.1],[0.1]],
+      "chart_value_range": [[0.1],[0.1],[100],[100]],
+      "chart_domain": "y",
       "max_lost": 900000
     }
   }

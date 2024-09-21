@@ -1,0 +1,27 @@
+{
+  "inclinometer_array": {
+    "text": "Inclinometer array",
+    "icon": "icon-list_square",
+    "set_id": {
+      "Inclinometer_Array_1": "150313b3-f8cb-4cbf-9704-15d2b9b14ea8",
+      "Inclinometer_Array_2": "2e34f1de-16fa-4ea3-aff2-2cd4ddcfd3b0",
+      "Inclinometer_Array_3": "368596e1-6250-4366-8cc0-e509e4ea88a6",
+      "Inclinometer_Array_4": "46fff774-e96f-4f3c-88ae-44da8b50d60e",
+      "Inclinometer_Array_5": "55e38359-61a6-413b-a839-731d8a567879",
+      "Inclinometer_Array_6": "63fb44b6-4fca-4054-b5d5-fbcafcfe3a97",
+      "Inclinometer_Array_7": "76786be7-dd6f-41f6-8d19-3fd705360df2",
+      "Inclinometer_Array_8": "809b5403-eedc-4c0a-b618-b35cf51a8ad3",
+      "Inclinometer_Array_9": "9c97a1fe-92be-4743-81a6-cbd7f4fa7e19"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": 3,
+      "chart_value_range": [[0.1],[0.1],[100],[100]],
+      "chart_domain_range": [[1000],[1000],[1000],[1000]],
+      "chart_domain": "y",
+      "max_lost": 900000
+    }
+  }
+}

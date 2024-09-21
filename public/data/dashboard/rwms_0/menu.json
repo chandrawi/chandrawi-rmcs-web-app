@@ -1,0 +1,43 @@
+[{
+  "id": 0,
+  "parent_id": 0,
+  "name": "overview",
+  "text": "Overview",
+  "icon": "icon-overview",
+  "link": ""
+}, {
+  "id": 1,
+  "parent_id": 1,
+  "name": "information",
+  "text": "Information",
+  "icon": "icon-information",
+  "link": ""
+}, {
+  "id": 2,
+  "parent_id": 2,
+  "name": "sensor",
+  "text": "Sensor",
+  "icon": "icon-sensor_device",
+  "link": ""
+}, {
+  "id": 3,
+  "parent_id": 2,
+  "name": "inclinometer",
+  "text": "Inclinometer",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 7,
+  "parent_id": 7,
+  "name": "analysis",
+  "text": "Analysis",
+  "icon": "icon-analysis",
+  "link": ""
+}, {
+  "id": 8,
+  "parent_id": 7,
+  "name": "inclinometer_array",
+  "text": "Inclinometer Array",
+  "icon": "icon-list_square",
+  "link": ""
+}]

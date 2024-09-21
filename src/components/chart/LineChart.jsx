@@ -38,7 +38,9 @@ export default function LineChart(props) {
     },
     mark: {
       type: 'line',
-      interpolate: 'monotone'
+      point: true,
+      interpolate: 'natural',
+      tooltip: true
     },
     encoding: {
       x: {

@@ -1,6 +1,6 @@
 import { Show, For, createSignal, createResource, createEffect } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
-import { read_set, read_model, read_device, list_data_set_by_last_time, list_data_set_by_range_time, list_data_set_by_time } from "rmcs-api-client";
+import { read_set, read_model, read_device, list_data_set_by_last_time, list_data_set_by_range_time, read_data_set } from "rmcs-api-client";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
 import LineChart from "../chart/LineChart";
@@ -61,7 +61,7 @@ export default function AnalysisSoilInclinometer(props) {
       let first_id = configs[0].device_id;
       for (const config of configs) {
         if (config.name == "space") {
-          position = config.device_id == first_id ? position : position + config.value;
+          position = position + config.value;
           map[config.device_id] = position;
         }
       }
@@ -85,7 +85,7 @@ export default function AnalysisSoilInclinometer(props) {
       });
     }
     else if (timeMode() == "history" && dataMode() == "specific") {
-      return await list_data_set_by_time(resourceServer.get(props.apiId), {
+      return await read_data_set(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         timestamp: timeSpecific()
       });
@@ -218,7 +218,8 @@ export default function AnalysisSoilInclinometer(props) {
           items.push({
             scale: scale,
             content: scale + " [" + symbol + "]",
-            range: config("chart_value_range") ? config("chart_value_range")[i] : undefined
+            range: config("chart_value_range") ? config("chart_value_range")[i] : undefined,
+            range_domain: config("chart_domain_range") ? config("chart_domain_range")[i] : undefined
           });
         }
         scales.push(scale);
@@ -402,9 +403,9 @@ export default function AnalysisSoilInclinometer(props) {
               </div>
               <div class="p-3 bg-white dark:bg-gray-900">
                 <Show when={config("chart_domain") == "y"} fallback={
-                  <LineChart data={dataCharts()[item.scale]} domain="Position" xColumn="Position" yColumn={item.scale} yRange={item.range} />
+                  <LineChart data={dataCharts()[item.scale]} domain="Position" xColumn="Position" yColumn={item.scale} yRange={item.range} xRange={item.range_domain} />
                 }>
-                  <LineChart data={dataCharts()[item.scale]} domain="Position" yColumn="Position" xColumn={item.scale} xRange={item.range} />
+                  <LineChart data={dataCharts()[item.scale]} domain="Position" yColumn="Position" xColumn={item.scale} xRange={item.range} yRange={item.range_domain} />
                 </Show>
               </div>
             </div>

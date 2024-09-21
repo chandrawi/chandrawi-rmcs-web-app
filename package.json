@@ -24,9 +24,9 @@
     "@solidjs/router": "^0.13.5",
     "google-protobuf": "^3.21.2",
     "grpc-web": "^1.5.0",
-    "rmcs-api-client": "file:../rmcs-workspace/rmcs-api-client/web",
-    "rmcs-auth-api": "file:../rmcs-workspace/rmcs-auth-api/web",
-    "rmcs-resource-api": "file:../rmcs-workspace/rmcs-resource-api/web",
+    "rmcs-api-client": "file:/opt/rmcs-workspace/rmcs-api-client/web",
+    "rmcs-auth-api": "file:/opt/rmcs-workspace/rmcs-auth-api/web",
+    "rmcs-resource-api": "file:/opt/rmcs-workspace/rmcs-resource-api/web",
     "solid-js": "^1.8.11"
   }
 }

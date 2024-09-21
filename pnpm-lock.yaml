@@ -18,14 +18,14 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0
       rmcs-api-client:
-        specifier: file:../rmcs-workspace/rmcs-api-client/web
-        version: file:../rmcs-workspace/rmcs-api-client/web
+        specifier: file:/opt/rmcs-workspace/rmcs-api-client/web
+        version: file:../../../opt/rmcs-workspace/rmcs-api-client/web
       rmcs-auth-api:
-        specifier: file:../rmcs-workspace/rmcs-auth-api/web
-        version: file:../rmcs-workspace/rmcs-auth-api/web
+        specifier: file:/opt/rmcs-workspace/rmcs-auth-api/web
+        version: file:../../../opt/rmcs-workspace/rmcs-auth-api/web
       rmcs-resource-api:
-        specifier: file:../rmcs-workspace/rmcs-resource-api/web
-        version: file:../rmcs-workspace/rmcs-resource-api/web
+        specifier: file:/opt/rmcs-workspace/rmcs-resource-api/web
+        version: file:../../../opt/rmcs-workspace/rmcs-resource-api/web
       solid-js:
         specifier: ^1.8.11
         version: 1.8.11
@@ -1075,14 +1075,14 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
-  rmcs-api-client@file:../rmcs-workspace/rmcs-api-client/web:
-    resolution: {directory: ../rmcs-workspace/rmcs-api-client/web, type: directory}
+  rmcs-api-client@file:../../../opt/rmcs-workspace/rmcs-api-client/web:
+    resolution: {directory: ../../../opt/rmcs-workspace/rmcs-api-client/web, type: directory}
 
-  rmcs-auth-api@file:../rmcs-workspace/rmcs-auth-api/web:
-    resolution: {directory: ../rmcs-workspace/rmcs-auth-api/web, type: directory}
+  rmcs-auth-api@file:../../../opt/rmcs-workspace/rmcs-auth-api/web:
+    resolution: {directory: ../../../opt/rmcs-workspace/rmcs-auth-api/web, type: directory}
 
-  rmcs-resource-api@file:../rmcs-workspace/rmcs-resource-api/web:
-    resolution: {directory: ../rmcs-workspace/rmcs-resource-api/web, type: directory}
+  rmcs-resource-api@file:../../../opt/rmcs-workspace/rmcs-resource-api/web:
+    resolution: {directory: ../../../opt/rmcs-workspace/rmcs-resource-api/web, type: directory}
 
   rollup-plugin-visualizer@5.12.0:
     resolution: {integrity: sha512-8/NU9jXcHRs7Nnj07PF2o4gjxmm9lXIrZ8r175bT9dK8qoLlvKTwRMArRCMgpMGlq8CTLugRvEmyMeMXIU2pNQ==}
@@ -2257,19 +2257,19 @@ snapshots:
 
   reusify@1.0.4: {}
 
-  rmcs-api-client@file:../rmcs-workspace/rmcs-api-client/web:
+  rmcs-api-client@file:../../../opt/rmcs-workspace/rmcs-api-client/web:
     dependencies:
       google-protobuf: 3.21.2
       grpc-web: 1.5.0
-      rmcs-auth-api: file:../rmcs-workspace/rmcs-auth-api/web
-      rmcs-resource-api: file:../rmcs-workspace/rmcs-resource-api/web
+      rmcs-auth-api: file:../../../opt/rmcs-workspace/rmcs-auth-api/web
+      rmcs-resource-api: file:../../../opt/rmcs-workspace/rmcs-resource-api/web
 
-  rmcs-auth-api@file:../rmcs-workspace/rmcs-auth-api/web:
+  rmcs-auth-api@file:../../../opt/rmcs-workspace/rmcs-auth-api/web:
     dependencies:
       google-protobuf: 3.21.2
       grpc-web: 1.5.0
 
-  rmcs-resource-api@file:../rmcs-workspace/rmcs-resource-api/web:
+  rmcs-resource-api@file:../../../opt/rmcs-workspace/rmcs-resource-api/web:
     dependencies:
       google-protobuf: 3.21.2
       grpc-web: 1.5.0

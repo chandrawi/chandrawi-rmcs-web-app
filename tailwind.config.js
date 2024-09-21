@@ -8,6 +8,10 @@ export default {
     extend: {
       screens: {
         'xs': '420px',
+        'fhd': '1824px',  /** 1920px */
+        'qhd': '2432px',  /** 2560px */
+        'qhd+': '3040px', /** 3200px */
+        'uhd': '3648px'   /** 3840px */
       },
       fontFamily: {
         'inter': ['Inter', 'ui-sans-serif', 'sans-serif', 'Arial']
@@ -18,4 +22,8 @@ export default {
     },
   },
   plugins: [daisyui],
+  daisyui: {
+    themes: ["winter", "night"],
+    darkMode: ['class', '[data-theme="night"]']
+  },
 };

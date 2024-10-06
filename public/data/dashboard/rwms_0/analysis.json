@@ -17,8 +17,8 @@
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "float_precission": 3,
-      "chart_value_range": [[0.1],[0.1],[100],[100]],
+      "float_precission": {"inclination-X":5, "inclination-Z":5, "displacement-X":3, "displacement-Z":3},
+      "chart_value_range": [[0.01],[0.01],[50],[50]],
       "chart_domain_range": [[1000],[1000],[1000],[1000]],
       "chart_domain": "y",
       "max_lost": 900000
